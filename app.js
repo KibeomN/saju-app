@@ -1,3 +1,6 @@
+// 휴대폰(특히 카톡)이 예전 화면을 저장해 두고 새 기능 파일과 섞어 쓰면 버튼이 멈춤 → 예전 화면이면 새 주소로 한 번 다시 열기
+(function () { if (!document.getElementById("myName") && !/[?&]r=/.test(location.search)) { location.replace(location.pathname + "?r=" + Date.now()); throw new Error("새 화면으로 다시 여는 중"); } })();
+
 // 사주 계산기
 // - 년주: 입춘 기준, 월주: 절기(절입) 기준 — 태양의 위치(황경)로 계산
 // - 일주: 날짜 순번으로 60갑자 계산, 23시 이후는 다음 날로 봄

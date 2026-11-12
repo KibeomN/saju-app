@@ -1,3 +1,6 @@
+// 휴대폰(특히 카톡)이 예전 화면을 저장해 두고 새 기능 파일과 섞어 쓰면 버튼이 멈춤 → 예전 화면이면 새 주소로 한 번 다시 열기
+(function () { if (!document.getElementById("myName") && !/[?&]r=/.test(location.search)) { location.replace(location.pathname + "?r=" + Date.now()); throw new Error("새 화면으로 다시 여는 중"); } })();
+
 // 오늘의 운세 + 친구 목록 + 친구와 오늘의 궁합
 // - 오늘의 운세는 '오늘의 일진(오늘 날짜의 일주)'이 내 사주와 어떤 관계인지로 계산
 // - 내 정보와 친구 목록은 이 기기(브라우저)에만 저장 (서버 없음)

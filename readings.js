@@ -1,3 +1,6 @@
+// 휴대폰(특히 카톡)이 예전 화면을 저장해 두고 새 기능 파일과 섞어 쓰면 버튼이 멈춤 → 예전 화면이면 새 주소로 한 번 다시 열기
+(function () { if (!document.getElementById("myName") && !/[?&]r=/.test(location.search)) { location.replace(location.pathname + "?r=" + Date.now()); throw new Error("새 화면으로 다시 여는 중"); } })();
+
 // 사주 풀이 문장 모음
 // 십성 순서: 0 비견, 1 겁재, 2 식신, 3 상관, 4 편재, 5 정재, 6 편관, 7 정관, 8 편인, 9 정인
 // 그룹 순서: 0 비겁, 1 식상, 2 재성, 3 관성, 4 인성

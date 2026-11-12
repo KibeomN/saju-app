@@ -1,3 +1,6 @@
+// 휴대폰(특히 카톡)이 예전 화면을 저장해 두고 새 기능 파일과 섞어 쓰면 버튼이 멈춤 → 예전 화면이면 새 주소로 한 번 다시 열기
+(function () { if (!document.getElementById("myName") && !/[?&]r=/.test(location.search)) { location.replace(location.pathname + "?r=" + Date.now()); throw new Error("새 화면으로 다시 여는 중"); } })();
+
 // 심층 궁합 (잠금 콘텐츠)
 // 지금은 '테스트 모드': 광고 보기·결제 버튼을 누르면 실제 광고·결제 없이 바로 열림
 // 나중에 진짜 광고/결제를 붙일 때는 unlockWithAd(), unlockWithPay() 안쪽만 바꾸면 됨

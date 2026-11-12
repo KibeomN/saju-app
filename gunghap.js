@@ -1,3 +1,6 @@
+// 휴대폰(특히 카톡)이 예전 화면을 저장해 두고 새 기능 파일과 섞어 쓰면 버튼이 멈춤 → 예전 화면이면 새 주소로 한 번 다시 열기
+(function () { if (!document.getElementById("myName") && !/[?&]r=/.test(location.search)) { location.replace(location.pathname + "?r=" + Date.now()); throw new Error("새 화면으로 다시 여는 중"); } })();
+
 // 회원번호 + 궁합
 // 회원번호에는 생년월일·시간·성별·보정 여부가 담겨 있음 (저장소 없이 번호만으로 사주를 다시 계산)
 // 주의: 암호가 아니라 '섞어 둔 것'이라, 번호를 아는 사람은 생년월일을 알 수 있음
