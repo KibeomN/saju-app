@@ -248,7 +248,7 @@
 
   // 사주 보기 바로 아래 '궁합 보기' 버튼: 내 사주를 먼저 계산하고 궁합 칸으로 이동
   $("quickGunghap").addEventListener("click", () => {
-    $("form").requestSubmit();
+    submitForm($("form"));
     if ($("result").classList.contains("hidden")) return; // 내 생일이 잘못된 경우
     setTimeout(() => $("ghCard").scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   });

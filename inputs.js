@@ -27,6 +27,24 @@
     write(id, y, mo, d) { $(id).value = `${y}.${pad(mo)}.${pad(d)}`; },
   };
 
+  // 오래된 아이폰 브라우저에는 requestSubmit 기능이 없어서 대신 쓰는 함수
+  window.submitForm = (form) => {
+    if (typeof form.requestSubmit === "function") form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+  };
+
+  // 화면에 오류가 생기면 사용자에게 알려주기 (원인 파악용)
+  window.addEventListener("error", (e) => {
+    let bar = document.getElementById("errBar");
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.id = "errBar";
+      bar.style.cssText = "position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#8b3a2b;color:#fff;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.5";
+      document.body.appendChild(bar);
+    }
+    bar.textContent = "앗, 문제가 생겼어요. 새로고침해도 계속되면 이 문구를 캡처해서 알려주세요: " + String(e.message || "").slice(0, 120);
+  });
+
   window.TimeField = {
     read(id) { return { h: +$(id + "H").value, mi: +$(id + "M").value }; },
     write(id, h, mi) { $(id + "H").value = String(h); $(id + "M").value = String(mi); },

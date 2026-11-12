@@ -237,7 +237,7 @@
     TimeField.setDisabled("birthTime", !saved.timeKnown);
     if (saved.timeKnown) TimeField.write("birthTime", saved.h, saved.mi);
     $("correction").checked = !!saved.correction;
-    $("form").requestSubmit();
+    submitForm($("form"));
     window.scrollTo(0, 0);
   }
 
