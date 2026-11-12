@@ -15,6 +15,12 @@
     </header>
 
     <form id="form" class="card">
+      <label class="field">
+        <span>내 이름</span>
+        <input type="text" id="myName" placeholder="성까지 함께 (예: 홍길동)" maxlength="20" autocomplete="name">
+        <small class="notice">이름과 이용 기록(사주·궁합을 본 시간)이 운영자에게 저장돼요. 생년월일과 상대 정보는 저장하지 않아요.</small>
+      </label>
+
       <div class="field">
         <span>성별</span>
         <div class="seg">
@@ -25,13 +31,13 @@
 
       <label class="field">
         <span>태어난 날 (양력)</span>
-        <input type="date" id="birthDate" required min="1900-01-01" max="2100-12-31">
+        <input type="text" id="birthDate" class="date-input" inputmode="numeric" placeholder="숫자 8자리 (예: 1995.08.15)" autocomplete="off" maxlength="10">
       </label>
 
-      <label class="field">
+      <div class="field">
         <span>태어난 시간</span>
-        <input type="time" id="birthTime" value="12:00">
-      </label>
+        <div class="time-row" id="birthTime"><select id="birthTimeH" aria-label="시"></select><select id="birthTimeM" aria-label="분"></select></div>
+      </div>
 
       <label class="check">
         <input type="checkbox" id="unknownTime">
@@ -48,7 +54,9 @@
         <span>이 기기에 내 정보 기억하기<small>다음에 열면 바로 오늘의 운세가 나와요</small></span>
       </label>
 
+      <p id="formMsg" class="err"></p>
       <button type="submit" class="btn">사주 보기</button>
+      <button type="button" id="quickGunghap" class="btn btn-light">💞 궁합 보기</button>
       <button type="button" id="forgetMe" class="link-btn">저장된 내 정보 지우기</button>
     </form>
 
@@ -59,24 +67,21 @@
         <p id="ganjiLine" class="ganji-line"></p>
       </div>
 
-      <div class="card">
-        <h2>☀️ 오늘의 운세</h2>
-        <div id="todayBox"></div>
-      </div>
-
-      <div class="card code-card">
-        <h2>내 회원번호</h2>
-        <div class="code-row"><span id="myCode" class="code"></span><button type="button" id="copyCode" class="btn-sm">복사</button></div>
-        <p class="hint">친구에게 이 번호를 보내면 서로 궁합을 볼 수 있어요. 번호를 받은 사람에게는 내 생년월일·태어난 시간·성별이 보이지 않아요.</p>
-        <button type="button" id="openGunghap" class="btn">💞 궁합 보기</button>
-        <form id="gunghapForm" class="hidden gh-form">
+      <div class="card code-card" id="ghCard">
+        <h2>💞 궁합 보기</h2>
+        <form id="gunghapForm" class="gh-form">
           <div class="seg seg-mode">
             <label><input type="radio" name="ghMode" value="birth" checked><span>생일로 보기</span></label>
             <label><input type="radio" name="ghMode" value="code"><span>회원번호로 보기</span></label>
           </div>
           <p id="modeHint" class="hint">상대가 앱을 쓰지 않아도 생일만 알면 볼 수 있어요.</p>
-          <label class="field"><span>상대 이름</span><input id="friendName" placeholder="예: 민지" maxlength="10"></label>
+          <label class="field"><span>상대 이름</span><input id="friendName" placeholder="성까지 함께 (예: 김민지)" maxlength="10"></label>
           <div id="modeCode" class="hidden">
+            <div class="mycode">
+              <div class="mini-title">내 회원번호</div>
+              <div class="code-row"><span id="myCode" class="code"></span><button type="button" id="copyCode" class="btn-sm">복사</button></div>
+              <p class="hint">친구에게 이 번호를 보내면 서로 궁합을 볼 수 있어요. 번호를 받은 사람에게는 내 생년월일·태어난 시간·성별이 보이지 않아요.</p>
+            </div>
             <label class="field"><span>상대 회원번호</span><input id="friendCode" placeholder="예: AB3-K7QZ" autocomplete="off" autocapitalize="characters"></label>
           </div>
           <div id="modeBirth">
@@ -87,8 +92,8 @@
                 <label><input type="radio" name="pGender" value="female" checked><span>여자</span></label>
               </div>
             </div>
-            <label class="field"><span>상대 생일 (양력)</span><input type="date" id="pDate" min="1900-01-01" max="2100-12-31"></label>
-            <label class="field"><span>상대 태어난 시간</span><input type="time" id="pTime" value="12:00" disabled></label>
+            <label class="field"><span>상대 생일 (양력)</span><input type="text" id="pDate" class="date-input" inputmode="numeric" placeholder="숫자 8자리 (예: 1998.04.21)" autocomplete="off" maxlength="10"></label>
+            <div class="field"><span>상대 태어난 시간</span><div class="time-row" id="pTime"><select id="pTimeH" aria-label="시"></select><select id="pTimeM" aria-label="분"></select></div></div>
             <label class="check"><input type="checkbox" id="pUnknown" checked><span>시간을 몰라요<small>시간을 모르면 여섯 글자로 봐요. 알면 더 정확해져요</small></span></label>
           </div>
           <p id="codeMsg" class="err"></p>
@@ -103,6 +108,11 @@
         <div id="ghTabs" class="tabs gh-tabs"></div>
         <div id="ghPanels"></div>
         <div id="premium" class="premium"></div>
+      </div>
+
+      <div class="card">
+        <h2>☀️ 오늘의 운세</h2>
+        <div id="todayBox"></div>
       </div>
 
       <div class="card">
@@ -125,6 +135,9 @@
       <p class="note">재미로 보는 풀이예요. 중요한 결정은 스스로 판단해 주세요.</p>
     </section>
   </main>
+  <script src="config.js"></script>
+  <script src="log.js"></script>
+  <script src="inputs.js"></script>
   <script src="readings.js"></script>
   <script src="app.js"></script>
   <script src="gunghap.js"></script>

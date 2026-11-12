@@ -159,6 +159,7 @@
     if (!list.includes(pairKey())) list.push(pairKey());
     store.set(UNLOCK_KEY, list.slice(-200));
     mem.add(pairKey());
+    if (window.logUse) window.logUse("premium", SajuCode.getMyName());
     render();
   }
 

@@ -231,10 +231,11 @@
   if (saved && saved.y) {
     const pad = (n) => String(n).padStart(2, "0");
     document.querySelector(`input[name="gender"][value="${saved.gender}"]`).checked = true;
-    $("birthDate").value = `${saved.y}-${pad(saved.mo)}-${pad(saved.d)}`;
+    DateField.write("birthDate", saved.y, saved.mo, saved.d);
+    if (saved.name) $("myName").value = saved.name;
     $("unknownTime").checked = !saved.timeKnown;
-    $("birthTime").disabled = !saved.timeKnown;
-    if (saved.timeKnown) $("birthTime").value = `${pad(saved.h)}:${pad(saved.mi)}`;
+    TimeField.setDisabled("birthTime", !saved.timeKnown);
+    if (saved.timeKnown) TimeField.write("birthTime", saved.h, saved.mi);
     $("correction").checked = !!saved.correction;
     $("form").requestSubmit();
     window.scrollTo(0, 0);

@@ -216,8 +216,9 @@
   window.onMySaju = (info, a) => {
     myInfo = info; myAnalysis = a;
     $("myCode").textContent = encode(info);
-    $("gunghapForm").classList.add("hidden");
     $("gunghapResult").classList.add("hidden");
+    // 상대 성별 기본값: 나와 반대
+    document.querySelector(`input[name="pGender"][value="${a.gender === "male" ? "female" : "male"}"]`).checked = true;
     $("codeMsg").textContent = "";
   };
 
@@ -242,13 +243,14 @@
     $("codeMsg").textContent = "";
   }
   document.querySelectorAll('input[name="ghMode"]').forEach((r) => r.addEventListener("change", () => setMode(mode())));
-  $("pUnknown").addEventListener("change", () => { $("pTime").disabled = $("pUnknown").checked; });
+  $("pUnknown").addEventListener("change", () => { TimeField.setDisabled("pTime", $("pUnknown").checked); });
+  TimeField.setDisabled("pTime", $("pUnknown").checked);
 
-  $("openGunghap").addEventListener("click", () => {
-    $("gunghapForm").classList.remove("hidden");
-    // 기본값: 상대 성별은 나와 반대
-    if (myAnalysis) document.querySelector(`input[name="pGender"][value="${myAnalysis.gender === "male" ? "female" : "male"}"]`).checked = true;
-    $("friendName").focus();
+  // 사주 보기 바로 아래 '궁합 보기' 버튼: 내 사주를 먼저 계산하고 궁합 칸으로 이동
+  $("quickGunghap").addEventListener("click", () => {
+    $("form").requestSubmit();
+    if ($("result").classList.contains("hidden")) return; // 내 생일이 잘못된 경우
+    setTimeout(() => $("ghCard").scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   });
 
   $("friendCode").addEventListener("input", (e) => {
@@ -267,11 +269,11 @@
       $("codeMsg").textContent = "";
       showPartner(info, name, code, false);
     } else {
-      const dv = $("pDate").value;
-      if (!dv) { $("codeMsg").textContent = "상대 생일을 넣어 주세요."; return; }
-      const [y, mo, d] = dv.split("-").map(Number);
-      const known = !$("pUnknown").checked && $("pTime").value;
-      const [h, mi] = known ? $("pTime").value.split(":").map(Number) : [12, 0];
+      const dt = DateField.read("pDate");
+      if (!dt) { $("codeMsg").textContent = "상대 생일을 다시 확인해 주세요. 숫자 8자리로 넣어요 (예: 1998.04.21)"; return; }
+      const { y, mo, d } = dt;
+      const known = !$("pUnknown").checked;
+      const { h, mi } = known ? TimeField.read("pTime") : { h: 12, mi: 0 };
       const info = { y, mo, d, h, mi, timeKnown: !!known, gender: document.querySelector('input[name="pGender"]:checked').value, correction: true };
       $("codeMsg").textContent = "";
       showPartner(info, name, encode(info), true);
@@ -288,6 +290,7 @@
     const you = analyzeInfo(info);
     renderGunghap(myAnalysis, you, name);
     if (window.onGunghap) window.onGunghap(myAnalysis, you, esc(name), code);
+    if (window.logUse && myInfo) window.logUse("gunghap", myInfo.name);
   }
   let partnerLabel = "";
 
@@ -377,5 +380,5 @@
     document.querySelectorAll(".gh-panel").forEach((p) => p.classList.toggle("hidden", p.dataset.i !== b.dataset.i));
   });
 
-  window.SajuCode = { encode, decode, compare, analyzeInfo, showPartner, getLastPartner: () => lastPartner, getMyCode: () => (myInfo ? encode(myInfo) : "") };
+  window.SajuCode = { encode, decode, compare, analyzeInfo, showPartner, getLastPartner: () => lastPartner, getMyCode: () => (myInfo ? encode(myInfo) : ""), getMyName: () => (myInfo ? myInfo.name : "") };
 })();

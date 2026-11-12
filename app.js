@@ -437,20 +437,24 @@ document.getElementById("tabs").addEventListener("click", (e) => {
 });
 
 const unknown = document.getElementById("unknownTime");
-const timeInput = document.getElementById("birthTime");
-unknown.addEventListener("change", () => { timeInput.disabled = unknown.checked; });
+unknown.addEventListener("change", () => { TimeField.setDisabled("birthTime", unknown.checked); });
 
 document.getElementById("form").addEventListener("submit", (e) => {
   e.preventDefault();
-  const dateVal = document.getElementById("birthDate").value;
-  if (!dateVal) return;
+  const dt = DateField.read("birthDate");
+  const msg = document.getElementById("formMsg");
+  const name = document.getElementById("myName").value.trim();
+  if (!name) { msg.textContent = "내 이름을 적어 주세요."; document.getElementById("myName").focus(); return; }
+  if (!dt) { msg.textContent = "생일을 다시 확인해 주세요. 숫자 8자리로 넣어요 (예: 1995.08.15)"; return; }
+  msg.textContent = "";
   const gender = document.querySelector('input[name="gender"]:checked').value;
-  const [y, mo, d] = dateVal.split("-").map(Number);
-  const timeKnown = !unknown.checked && timeInput.value;
-  const [h, mi] = timeKnown ? timeInput.value.split(":").map(Number) : [12, 0];
+  const { y, mo, d } = dt;
+  const timeKnown = !unknown.checked;
+  const { h, mi } = timeKnown ? TimeField.read("birthTime") : { h: 12, mi: 0 };
   const correction = document.getElementById("correction").checked;
   const s = calcSaju(y, mo, d, h, mi, !!timeKnown, correction);
   const a = analyze(s, gender, { y, mo, d });
   render(a);
-  if (window.onMySaju) window.onMySaju({ y, mo, d, h, mi, timeKnown: !!timeKnown, gender, correction }, a);
+  if (window.onMySaju) window.onMySaju({ y, mo, d, h, mi, timeKnown: !!timeKnown, gender, correction, name }, a);
+  if (window.logUse) window.logUse("saju", name);
 });

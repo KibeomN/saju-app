@@ -205,3 +205,19 @@ ul.dates span { color: var(--muted); }
 #modal.hidden { display: none; }
 .modal-box { background: var(--card); border-radius: 18px; padding: 22px; width: 100%; max-width: 360px; text-align: center; }
 .ad-box { height: 180px; border-radius: 12px; background: #e9e2d6; display: grid; place-items: center; align-content: center; font-size: 22px; font-weight: 700; color: var(--muted); }
+
+/* 입력칸이 모바일에서 밖으로 튀어나오지 않게 */
+.field input:not([type=radio]):not([type=checkbox]), .field select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
+.seg label { position: relative; }
+.time-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; }
+.time-row select {
+  font-size: 18px; padding: 12px 10px; border: 1px solid var(--line); border-radius: 12px;
+  background: #fff; color: var(--ink); font-family: inherit; min-width: 0; width: 100%;
+}
+.time-row.off { opacity: .45; }
+.date-input { letter-spacing: 1px; }
+.mycode { background: #fff7f2; border-radius: 12px; padding: 12px; margin-bottom: 14px; }
+.mycode .mini-title { margin-top: 0; }
+#quickGunghap { margin-top: 10px; }
+#ghCard .gh-form { margin-top: 0; border-top: 0; padding-top: 0; }
+.notice { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
